@@ -2,36 +2,36 @@
 # tasks file for jetbrains-rider > uninstall
 # Revert (Uninstall) Tasks
 - name: Check if the installation directory exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ rider_install_dir }}"
   register: rider_install_dir_status
 
 - name: Remove the JetBrains Rider installation directory
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ rider_install_dir }}"
     state: absent
   when: rider_install_dir_status.stat.exists
 
 - name: Check if the symlink exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ rider_symlink_path }}"
   register: rider_symlink_status
 
 - name: Remove the symlink to rider.sh
   become: true
-  file:
+  ansible.builtin.file:
     path: "{{ rider_symlink_path }}"
     state: absent
   when: rider_symlink_status.stat.exists
 
 - name: Cleanup Rider tar.gz from /tmp (if exists)
-  file:
+  ansible.builtin.file:
     path: "/tmp/jetbrains_rider_{{ rider_version }}.tar.gz"
     state: absent
 
 # Remove the Rider desktop shortcut
 - name: Remove Rider desktop shortcut
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
     state: absent
