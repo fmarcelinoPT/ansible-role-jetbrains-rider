@@ -42,3 +42,10 @@
     state: absent
   with_items: "{{ rider_installed_versions.files }}"
   when: "item.path != '{{ rider_install_dir }}/Rider-{{ rider_version }}'"
+
+# Create a desktop shortcut for Rider
+- name: Create Rider desktop shortcut
+  template:
+    src: "rider.desktop.j2"
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
+  mode: '0644'

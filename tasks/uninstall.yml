@@ -29,3 +29,9 @@
   file:
     path: "/tmp/jetbrains_rider_{{ rider_version }}.tar.gz"
     state: absent
+
+# Remove the Rider desktop shortcut
+- name: Remove Rider desktop shortcut
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
+    state: absent
