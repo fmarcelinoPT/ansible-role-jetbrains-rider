@@ -1,6 +1,7 @@
 ---
 # tasks file for jetbrains-rider
 - name: Ensure the installation directory exists
+  become: true
   file:
     path: "{{ rider_install_dir }}"
     state: directory
