@@ -5,7 +5,7 @@
   file:
     path: "{{ rider_install_dir }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Download JetBrains Rider
   get_url:
@@ -48,4 +48,4 @@
   template:
     src: "rider.desktop.j2"
     dest: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
-  mode: '0644'
+    mode: "0644"
