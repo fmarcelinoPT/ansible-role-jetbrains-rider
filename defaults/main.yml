@@ -1,5 +1,6 @@
 ---
 # defaults file for jetbrains-rider
+rider_action: "install"  # Default action is 'install', can be 'uninstall'
 rider_version: "2023.1"
 rider_install_dir: "/opt/jetbrains"
 rider_symlink_path: "/usr/local/bin/rider"

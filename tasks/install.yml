@@ -1,0 +1,52 @@
+---
+# tasks file for jetbrains-rider > install
+- name: Ensure the installation directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ rider_install_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Download JetBrains Rider
+  ansible.builtin.get_url:
+    url: "{{ rider_download_url }}"
+    dest: "/tmp/jetbrains_rider_{{ rider_version }}.tar.gz"
+    mode: "0644"
+  when: rider_version not in lookup('fileglob', '{{ rider_install_dir }}/*')
+
+- name: Extract JetBrains Rider
+  become: true
+  ansible.builtin.unarchive:
+    src: "/tmp/jetbrains_rider_{{ rider_version }}.tar.gz"
+    dest: "{{ rider_install_dir }}"
+    remote_src: true
+  when: rider_version not in lookup('fileglob', '{{ rider_install_dir }}/*')
+
+- name: Create symlink for Rider
+  become: true
+  ansible.builtin.file:
+    src: "{{ rider_install_dir }}/JetBrains Rider-{{ rider_version }}/bin/rider.sh"
+    dest: "{{ rider_symlink_path }}"
+    state: link
+
+- name: Cleanup old versions if present
+  become: true
+  ansible.builtin.find:
+    paths: "{{ rider_install_dir }}"
+    patterns: "Rider-*"
+  register: rider_installed_versions
+
+- name: Remove old versions
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ rider_installed_versions.files }}"
+  when: "item.path != '{{ rider_install_dir }}/JetBrains Rider-{{ rider_version }}'"
+
+# Create a desktop shortcut for Rider
+- name: Create Rider desktop shortcut
+  ansible.builtin.template:
+    src: "rider.desktop.j2"
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
+    mode: "0644"
