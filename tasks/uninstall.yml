@@ -1,0 +1,29 @@
+---
+# tasks file for jetbrains-rider > uninstall
+# Revert (Uninstall) Tasks
+- name: Check if the installation directory exists
+  stat:
+    path: "{{ rider_install_dir }}"
+  register: rider_install_dir_status
+
+- name: Remove the JetBrains Rider installation directory
+  file:
+    path: "{{ rider_install_dir }}"
+    state: absent
+  when: rider_install_dir_status.stat.exists
+
+- name: Check if the symlink exists
+  stat:
+    path: "{{ rider_symlink_path }}"
+  register: rider_symlink_status
+
+- name: Remove the symlink to rider.sh
+  file:
+    path: "{{ rider_symlink_path }}"
+    state: absent
+  when: rider_symlink_status.stat.exists
+
+- name: Cleanup Rider tar.gz from /tmp (if exists)
+  file:
+    path: "/tmp/jetbrains_rider_{{ rider_version }}.tar.gz"
+    state: absent

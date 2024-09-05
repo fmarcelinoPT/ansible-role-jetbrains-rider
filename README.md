@@ -4,21 +4,13 @@
 
 `jetbrains_rider`
 
-This Ansible role installs or updates JetBrains Rider, a powerful IDE for .NET development, on a Linux machine. It manages the download, extraction, symlink creation, and version updates of Rider.
-
-## How it works
-
-1. **Ensure the installation directory exists**: If `/opt/jetbrains` does not exist, it is created.
-1. **Download Rider**: The `get_url` task fetches the Rider tarball if the version is not already installed.
-1. **Extract Rider**: The tarball is extracted into the installation directory.
-1. **Symlink creation**: A symlink to the Rider executable is created in `/usr/local/bin`.
-1. **Cleanup old versions**: Finds all Rider installations and removes older versions while keeping the current one.
+This Ansible role is designed to install or uninstall JetBrains Rider, a .NET development IDE, on Linux machines. You can control whether to install or remove JetBrains Rider using a variable.
 
 ## Requirements
 
-- Ansible 2.9 or higher.
-- The managed node should have internet access to download Rider from JetBrains.
-- Root privileges (using become: yes) to install Rider in system directories such as /opt and create symlinks in /usr/local/bin.
+- Ansible version: 2.9 or higher.
+- Root privileges (using `become: yes`), as installation happens in system directories such as `/opt/jetbrains` and symlinks are created in `/usr/local/bin`.
+- Internet access on the managed machine to download JetBrains Rider from JetBrains' website.
 
 ## Role Variables
 
@@ -26,14 +18,28 @@ This Ansible role installs or updates JetBrains Rider, a powerful IDE for .NET d
 
 |       Variable       |                     Description                     | Default Value                                                                     |
 | -------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `rider_action`       | Defines whether to `install` or `uninstall` Rider.  | `install`                                                                          |
 | `rider_version`      | Version of JetBrains Rider to install.              | `2023.1`                                                                          |
 | `rider_install_dir`  | Directory where JetBrains Rider will be installed.  | `/opt/jetbrains`                                                                  |
 | `rider_symlink_path` | Path for creating a symlink to rider.sh executable. | `/usr/local/bin/rider`                                                            |
 | `rider_download_url` | The URL to download Rider tarball.                  | `https://download.jetbrains.com/rider/JetBrains.Rider-{{ rider_version }}.tar.gz` |
 
-## Additional Variables
+## Action Control
 
-- You can override the default variables as needed to install a different version of Rider or specify a different installation directory or symlink path.
+- `rider_action`: Determines whether to install or uninstall JetBrains Rider. Valid values:
+  - `install`: Installs the specified version of JetBrains Rider.
+  - `uninstall`: Uninstalls JetBrains Rider and removes the associated symlink and installation directory.
+
+## Example of Overriding Variables
+
+You can override these variables in your playbook or via the command line:
+
+```yaml
+rider_action: "install"  # Can be 'install' or 'uninstall'
+rider_version: "2023.1.4"  # Specify a particular version
+rider_install_dir: "/opt/jetbrains"  # Specify custom install path
+rider_symlink_path: "/usr/local/bin/rider"  # Path to symlink for Rider
+```
 
 ## Dependencies
 
@@ -41,7 +47,9 @@ None.
 
 ## Example Playbook
 
-Below is an example of how to use the `jetbrains_rider` role in your Ansible playbook:
+Below is an example of how to use the `jetbrains_rider` role in your Ansible playbook.
+
+### Installing JetBrains Rider
 
 ```yaml
 ---
@@ -50,23 +58,35 @@ Below is an example of how to use the `jetbrains_rider` role in your Ansible pla
   roles:
     - role: jetbrains_rider
       vars:
-        rider_version: "2023.1.4"  # Specify the version you want to install
+        rider_action: "install"  # This installs Rider
+        rider_version: "2023.1.4"  # Optional: specify the version to install
 ```
 
-In this example:
+### Uninstalling JetBrains Rider
 
-- The role is applied to the `dev-machines` host group.
-- The `rider_version` variable is overridden to install a specific version (`2023.1.4`) of JetBrains Rider.
+```yaml
+---
+- hosts: dev-machines
+  become: yes
+  roles:
+    - role: jetbrains_rider
+      vars:
+        rider_action: "uninstall"  # This uninstalls Rider
+```
 
 ## Running the Playbook
 
-Run the playbook with the following command:
+To install JetBrains Rider, run:
 
 ```bash
-ansible-playbook -i inventory playbook.yml
+ansible-playbook -i inventory playbook.yml --extra-vars "rider_action=install"
 ```
 
-This will install or update JetBrains Rider on the specified hosts.
+To uninstall JetBrains Rider, run:
+
+```bash
+ansible-playbook -i inventory playbook.yml --extra-vars "rider_action=uninstall"
+```
 
 ## License
 
@@ -74,4 +94,4 @@ MIT
 
 ## Author Information
 
-This role was created by **Filipe Marcelino**.
+This role was created by **Filipe Marcelino**. Feel free to customize or extend the role to fit your needs.
