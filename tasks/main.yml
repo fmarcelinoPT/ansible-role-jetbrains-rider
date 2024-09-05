@@ -24,7 +24,7 @@
 - name: Create symlink for Rider
   become: true
   file:
-    src: "{{ rider_install_dir }}/Rider-{{ rider_version }}/bin/rider.sh"
+    src: "{{ rider_install_dir }}/JetBrains Rider-{{ rider_version }}/bin/rider.sh"
     dest: "{{ rider_symlink_path }}"
     state: link
 
