@@ -51,4 +51,4 @@
         src: "rider.desktop.j2"
         dest: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
         mode: "0644"
-  when: "rider_action == 'install' && not rider_folder.exists"
+  when: "rider_action == 'install' and not rider_folder.exists"
