@@ -94,4 +94,4 @@ MIT
 
 ## Author Information
 
-This role was created by **Filipe Marcelino**. Feel free to customize or extend the role to fit your needs.
+This role was created at 2024 by [fmarcelinoPT](https://github.com/fmarcelinoPT). Feel free to customize or extend the role to fit your needs.
