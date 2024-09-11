@@ -4,34 +4,31 @@
 - name: Check if the installation directory exists
   ansible.builtin.stat:
     path: "{{ rider_install_dir }}"
-  register: rider_install_dir_status
+  register: rider_folder
 
-- name: Remove the JetBrains Rider installation directory
-  become: true
-  ansible.builtin.file:
-    path: "{{ rider_install_dir }}"
-    state: absent
-  when: rider_install_dir_status.stat.exists
-
-- name: Check if the symlink exists
-  ansible.builtin.stat:
-    path: "{{ rider_symlink_path }}"
-  register: rider_symlink_status
-
-- name: Remove the symlink to rider.sh
-  become: true
-  ansible.builtin.file:
-    path: "{{ rider_symlink_path }}"
-    state: absent
-  when: rider_symlink_status.stat.exists
-
-- name: Cleanup Rider tar.gz from /tmp (if exists)
-  ansible.builtin.file:
-    path: "/tmp/jetbrains_rider_{{ rider_version }}.tar.gz"
-    state: absent
-
-# Remove the Rider desktop shortcut
-- name: Remove Rider desktop shortcut
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
-    state: absent
+- name: Uninstall JetBrains Rider
+  block:
+    - name: Remove the JetBrains Rider installation directory
+      become: true
+      ansible.builtin.file:
+        path: "{{ rider_install_dir }}"
+        state: absent
+    - name: Check if the symlink exists
+      ansible.builtin.stat:
+        path: "{{ rider_symlink_path }}"
+      register: rider_symlink_status
+    - name: Remove the symlink to rider.sh
+      become: true
+      ansible.builtin.file:
+        path: "{{ rider_symlink_path }}"
+        state: absent
+      when: rider_symlink_status.stat.exists
+    - name: Cleanup Rider tar.gz from /tmp (if exists)
+      ansible.builtin.file:
+        path: "/tmp/jetbrains_rider_{{ rider_version }}.tar.gz"
+        state: absent
+    - name: Remove Rider desktop shortcut
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.local/share/applications/rider.desktop"
+        state: absent
+  when: "rider_action == 'uninstall' and rider_folder.stat.exists"
