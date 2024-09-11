@@ -4,7 +4,7 @@
 - name: Check if the installation directory exists
   ansible.builtin.stat:
     path: "{{ rider_install_dir }}"
-  register: rider_install_dir_status
+  register: rider_folder
 
 - name: Uninstall JetBrains Rider
   block:
