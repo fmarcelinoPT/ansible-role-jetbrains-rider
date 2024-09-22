@@ -90,7 +90,7 @@ ansible-playbook -i inventory playbook.yml --extra-vars "rider_action=uninstall"
 
 ## License
 
-MIT
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Author Information
 
