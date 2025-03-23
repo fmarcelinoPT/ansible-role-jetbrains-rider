@@ -2,7 +2,7 @@ galaxy_info:
   author: Filipe Marcelino
   description: This Ansible role is designed to install or uninstall JetBrains Rider, a .NET development IDE, on Linux machines.
   company: OneMarc
-  role_name: jetbrains_rider
+  role_name: jetbrains-rider
   namespace: fmarcelinopt
 
   # If the issue tracker for your role is not on github, uncomment the
@@ -18,7 +18,7 @@ galaxy_info:
   # - CC-BY-4.0
   license: MIT
 
-  min_ansible_version: "2.1"
+  min_ansible_version: 2.1
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.
   # min_ansible_container_version:
