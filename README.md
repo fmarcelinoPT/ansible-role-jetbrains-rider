@@ -9,7 +9,7 @@ This Ansible role is designed to install or uninstall JetBrains Rider, a .NET de
 ## Requirements
 
 - Ansible version: 2.9 or higher.
-- Root privileges (using `become: yes`), as installation happens in system directories such as `/opt/jetbrains` and symlinks are created in `/usr/local/bin`.
+- Root privileges (using `become: true`), as installation happens in system directories such as `/opt/jetbrains` and symlinks are created in `/usr/local/bin`.
 - Internet access on the managed machine to download JetBrains Rider from JetBrains' website.
 
 ## Role Variables
@@ -54,7 +54,7 @@ Below is an example of how to use the `jetbrains_rider` role in your Ansible pla
 ```yaml
 ---
 - hosts: dev-machines
-  become: yes
+  become: true
   roles:
     - role: jetbrains_rider
       vars:
@@ -67,7 +67,7 @@ Below is an example of how to use the `jetbrains_rider` role in your Ansible pla
 ```yaml
 ---
 - hosts: dev-machines
-  become: yes
+  become: true
   roles:
     - role: jetbrains_rider
       vars:
